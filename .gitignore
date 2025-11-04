@@ -3,3 +3,5 @@
 **/*.cert
 **/*aadut1*
 **/entorno
+**/evaluacion
+**/__pycache__
