@@ -10,4 +10,3 @@ Importante para conectar con la base de datos:
     SUPABASE_DB_USER= debería ser postgres.[aquí va el id del proyecto]
     SUPABASE_DB_PASSWORD= la contraseña que hayas puesto al crear el proyecto
     SUPABASE_DB_PORT= 5432
-- 
