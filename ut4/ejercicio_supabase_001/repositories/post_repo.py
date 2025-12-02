@@ -2,6 +2,7 @@ from peewee import *
 from playhouse.postgres_ext import *
 from models.post_model import PostModel
 
+
 class PostRepo:
     @staticmethod
     def create(author,text):
@@ -29,3 +30,37 @@ class PostRepo:
         if post:
             post.stats["likes"] += 1
             post.save()
+            return post
+        return None
+    
+    @staticmethod
+    def user_posts(user_id):
+        return list(PostModel.select().where(PostModel.author == user_id))
+    
+    @staticmethod
+    def twenty_plus_likes():
+        from models.like_model import LikeModel
+        from peewee import fn
+        posts_20_plus_likes = {}
+        
+        posts = (PostModel.select(PostModel, fn.COUNT(LikeModel.id).alias("likes"))
+            .join(LikeModel, on=(PostModel.id == LikeModel.post))
+            .group_by(PostModel.id)
+            .having(fn.COUNT(LikeModel.id) >= 20)
+            .dicts())
+        
+        for post in posts:
+            posts_20_plus_likes[post["id"]] = post["likes"]
+        return posts_20_plus_likes
+        '''
+        # con backrefs (menos eficiente claro)
+        posts = PostModel.select()
+        for post in posts:
+            likes = list(post.likes)
+            if len(likes) >= 20:
+                posts_20_plus_likes[post] = len(likes)
+        return posts_20_plus_likes
+        '''
+
+    
+        
