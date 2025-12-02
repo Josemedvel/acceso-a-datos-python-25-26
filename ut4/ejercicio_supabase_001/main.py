@@ -20,11 +20,11 @@ putin = UserRepo.create(
     username = "LadaLover",
     email = "putin@kremlin.ru"
 )
-UserRepo.add_interest(trump.id, "programación")
-UserRepo.add_interest(trump.id, "programación")
-UserRepo.add_interest(trump.id, "patinaje")
-UserRepo.add_interest(putin.id, "patinaje")
-UserRepo.change_theme(trump.id)
+UserRepo.add_interest(trump, "programación")
+UserRepo.add_interest(trump, "programación")
+UserRepo.add_interest(trump, "patinaje")
+UserRepo.add_interest(putin, "patinaje")
+UserRepo.change_theme(trump)
 usuario = UserRepo.search_all()[0]
 if usuario:
     pprint(usuario.__dict__["__data__"])
