@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Contador de clics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 2rem; }
+      .row { display: flex; gap: 1rem; align-items: center; }
+      button { padding: .6rem 1rem; font-size: 1rem; }
+      .muted { color: #666; }
+    </style>
+  </head>
+  <body>
+    <h1>Contador de clics</h1>
+    <p>Cada clic se guarda en Redis y caduca en {{ ttl_seconds }} segundos.</p>
+
+    <div class="row">
+      <form method="post" action="/">
+        <button type="submit">Click +1</button>
+      </form>
+      <form method="post" action="/reset">
+        <button type="submit">Reset</button>
+      </form>
+    </div>
+
+    <p>Clicks actuales: <strong>{{ count }}</strong></p>
+    <p class="muted">Tiempo restante: {{ ttl }} s</p>
+  </body>
+</html>
