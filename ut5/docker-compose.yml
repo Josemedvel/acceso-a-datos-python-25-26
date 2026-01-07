@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis:8-alpine           
+    container_name: redis-persistente
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --save 900 1 --appendfsync everysec
+    volumes:
+      - redis-data:/data             # Volumen nombrado
+
+volumes:
+  redis-data:                       # Aquí se crea y gestiona el volumen

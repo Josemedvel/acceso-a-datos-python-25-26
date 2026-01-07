@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+</head>
+<body>
+    <!-- Uso de unas variables -->
+    <h1>Bienvenido/a {{datos["nombre"]}}</h1>
+    <p>Te recordamos que tu email es: {{datos["email"]}}</p>
+    <!-- Condicionales -->
+    {% if True %}
+        <p>La condición es cierta</p>
+    {% else %}
+        <p>La condición es falsa</p>
+    {% endif %}
+
+    <!-- Recorrido de listas e inclusión de templates -->
+    {% include "seccion_extra.html" %}
+</body>
+</html>
