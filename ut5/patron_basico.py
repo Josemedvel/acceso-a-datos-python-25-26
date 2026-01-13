@@ -29,7 +29,7 @@ def cumplir_anno(user_id):
         usuario["edad"] = usuario.get("edad", 0) + 1
         ttl = r.ttl(key)
         if ttl and ttl > 0:
-            r.setex(key, ttl, json.dumps(usuario))
+            r.setex(key, 60, json.dumps(usuario))
         else:
             # no tiene expiración o no existe (escribimos sin ttl)
             r.set(key, json.dumps(usuario))

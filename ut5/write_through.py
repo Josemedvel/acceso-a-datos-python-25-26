@@ -20,25 +20,25 @@ def init_db():
         conn.commit()
 
 def create_user_write_through(name:str, age:int):
-    conn = sqlite3.connect(DB_PATH)
-    try:
-        conn.execute("BEGIN")
-        cur = conn.cursor()
-        cur.execute("INSERT INTO users (name, age) VALUES (?, ?)", (name, age))
-        user_id = cur.lastrowid
-        user = {"id": user_id, "name": name, "age": age}
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.isolation_level = None #control manual
+        try:
+            conn.execute("BEGIN IMMEDIATE")
+            cur = conn.cursor()
+            cur.execute("INSERT INTO users (name, age) VALUES (?, ?)", (name, age))
+            user_id = cur.lastrowid
+            user = {"id": user_id, "name": name, "age": age}
 
-        pipe = r.pipeline() # por defecto se hace transacción
-        pipe.set(f"user:{user_id}", json.dumps(user))
-        pipe.execute()
+            pipe = r.pipeline() # por defecto se hace transacción
+            pipe.set(f"user:{user_id}", json.dumps(user))
+            pipe.execute()
 
-        conn.commit()
-        return user
-    except Exception:
-        conn.rollback()
-        raise
-    finally:
-        conn.close()
+            conn.commit()
+            
+            return user
+        except Exception:
+            conn.rollback()
+            raise
 
 
 def get_user(user_id:int):
