@@ -10,7 +10,6 @@ def update_user(user_id: int, name: str = None, age: int = None):
     try:
         conn.execute("BEGIN")
         cur = conn.cursor()
-        
         if name and age:
             cur.execute("UPDATE users SET name=?, age=? WHERE id=?", (name, age, user_id))
         elif name:
@@ -19,8 +18,27 @@ def update_user(user_id: int, name: str = None, age: int = None):
             cur.execute("UPDATE users SET age=? WHERE id=?", (age, user_id))
         
         # Invalidar caché (eliminar clave)
-        r.delete(f"user:{user_id}")
-        
+        #r.delete(f"user:{user_id}")
+        if name and age:
+            user = {
+                "id":user_id,
+                "name":name,
+                "age":age
+            }
+        else:
+            resultado_con = (cur.execute("SELECT name, age FROM users WHERE id=?",(user_id,))
+                .fetchone())
+            if resultado_con:
+                user = {
+                    "id":user_id,
+                    "name": resultado_con[0],
+                    "age": resultado_con[1]
+                }
+            else:
+                raise Exception(f"No se ha encontrado el usuario con id {user_id}")
+
+        r.setex(f"users:user_id", 60, user)
+
         conn.commit()
         return True
     except Exception:
